@@ -32,7 +32,7 @@ Currently, only Google Chrome is supported.
             });
         });
             
-        it('Should open the extension's popup', async () => {
+        it("Should open the extension's popup", async () => {
             // Use contentPage to interact with the content page (the page that is being browsed)
             // First, activate the content page
             contentPage.bringToFront();
