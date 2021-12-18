@@ -17,40 +17,45 @@
 const puppeteer = require('puppeteer');
 
 async function bootstrap(options = {}) {
-  const { devtools = false, slowMo = false, appUrl } = options;
-  const browser = await puppeteer.launch({
-    headless: false,
-    executablePath: process.env.PUPPETEER_EXEC_PATH,
-    devtools,
-    args: [
-      '--disable-extensions-except=./build',
-      '--load-extension=./build',
-      '--no-sandbox'
-    ],
-    ...(slowMo && { slowMo }),
-  });
+	const {
+		devtools = false, //Open the browser's devtools
+		slowMo = false, //slow down Puppeteer actions
+		appUrl, //The URL of the content page that is being browsed
+		pathToExtension, //The path to the extension's folder
+	} = options;
+	const browser = await puppeteer.launch({
+		headless: false,
+		executablePath: process.env.PUPPETEER_EXEC_PATH,
+		devtools,
+		args: [
+			`--disable-extensions-except=${pathToExtension}`,
+			`--load-extension=${pathToExtension}`,
+			'--no-sandbox',
+		],
+		...(slowMo && { slowMo }),
+	});
 
-  //Open content page
-  const contentPage = await browser.newPage();
-  await contentPage.goto(appUrl, { waitUntil: 'load' });
+	//Open content page
+	const contentPage = await browser.newPage();
+	await contentPage.goto(appUrl, { waitUntil: 'load' });
 
-  //Find extension ID
-  const targets = await browser.targets();
-  const extensionTarget = targets.find(target => target.type() === 'service_worker');
-  const partialExtensionUrl = extensionTarget._targetInfo.url || '';
-  const [, , extensionId] = partialExtensionUrl.split('/');
+	//Find extension ID
+	const targets = await browser.targets();
+	const extensionTarget = targets.find(target => target.type() === 'service_worker');
+	const partialExtensionUrl = extensionTarget._targetInfo.url || '';
+	const [, , extensionId] = partialExtensionUrl.split('/');
 
-  //Open extension in a tab
-  const extensionPage = await browser.newPage();
-  const extensionUrl = `chrome-extension://${extensionId}/index.html`;
-  await extensionPage.goto(extensionUrl, { waitUntil: 'load' });
+	//Open extension in a tab
+	const extensionPage = await browser.newPage();
+	const extensionUrl = `chrome-extension://${extensionId}/index.html`;
+	await extensionPage.goto(extensionUrl, { waitUntil: 'load' });
 
-  return {
-    contentPage,
-    browser,
-    extensionUrl,
-    extensionPage,
-  };
+	return {
+		contentPage,
+		browser,
+		extensionUrl,
+		extensionPage,
+	};
 }
 
 module.exports = { bootstrap };
