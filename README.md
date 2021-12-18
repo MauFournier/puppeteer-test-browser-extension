@@ -75,7 +75,7 @@ Check out my [Puppeteer Headful with Commands](https://github.com/marketplace/ac
 
 ## LICENSE:
 
-Check LICENSE.md
+Licensed under the Apache License, Version 2.0 (the "License"). Check LICENSE.md for more details.
 
 ## CREDIT:
 
