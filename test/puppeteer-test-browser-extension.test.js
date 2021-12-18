@@ -32,8 +32,8 @@ describe('Test browser extension', () => {
 		//Example: Click the button
 		await btn.click();
 
-		// Use extensionPage to interact with the extension's popup
-		// First, activate the popup
+		// Use extensionPage to nteract with the extension's popup (which has been opened in a separate browser tab).
+		// First, activate the popup page
 		await extensionPage.bringToFront();
 
 		// (Assuming your content page contains <h1>Extension popup</h1>)
