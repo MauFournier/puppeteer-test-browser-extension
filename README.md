@@ -26,12 +26,11 @@ Currently, only Google Chrome is supported.
                 //, devtools: true (uncomment to open the browser's devtools)
                 });
             
-                browser = extensionEnvironment.browser;
-                contentPage = extensionEnvironment.contentPage;
-                extensionPage = extensionEnvironment.extensionPage;
-            });
+            browser = extensionEnvironment.browser;
+            contentPage = extensionEnvironment.contentPage;
+            extensionPage = extensionEnvironment.extensionPage;
         });
-            
+
         it("Should open the extension's popup", async () => {
             // Use contentPage to interact with the content page (the page that is being browsed)
             // First, activate the content page
