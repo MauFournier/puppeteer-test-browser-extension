@@ -22,7 +22,7 @@ Currently, only Google Chrome is supported.
         beforeAll(async () => {
             const extensionEnvironment = await bootstrap({
                 appUrl: 'http://127.0.0.1:8080/test-page-001/' // The URL of the content page that is being browsed
-                // , slowMo: 100 (uncomment to slow down Puppeteer actions)
+                // , slowMo: 100 (uncomment to slow down Puppeteer's actions)
                 //, devtools: true (uncomment to open the browser's devtools)
                 });
             
