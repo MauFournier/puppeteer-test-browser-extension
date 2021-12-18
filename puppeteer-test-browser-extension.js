@@ -26,7 +26,7 @@ async function bootstrapExtension(options = {}) {
 	} = options;
 	const browser = await puppeteer.launch({
 		headless: false,
-		executablePath: process.env.PUPPETEER_EXEC_PATH,
+		executablePath: process.env.PUPPETEER_EXEC_PATH, //Needed to run on Github Actions CI - check https://github.com/marketplace/actions/puppeteer-headful-with-commands
 		devtools,
 		args: [
 			`--disable-extensions-except=${pathToExtension}`,
