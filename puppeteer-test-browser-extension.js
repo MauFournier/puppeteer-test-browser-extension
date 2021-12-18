@@ -20,7 +20,7 @@ async function bootstrap(options = {}) {
 	const {
 		devtools = false, //Open the browser's devtools
 		slowMo = false, //slow down Puppeteer actions
-		appUrl, //The URL of the content page that is being browsed
+		contentUrl, //The URL of the content page that is being browsed
 		pathToExtension, //The path to the extension's folder
 	} = options;
 	const browser = await puppeteer.launch({
@@ -37,7 +37,7 @@ async function bootstrap(options = {}) {
 
 	//Open content page
 	const contentPage = await browser.newPage();
-	await contentPage.goto(appUrl, { waitUntil: 'load' });
+	await contentPage.goto(contentUrl, { waitUntil: 'load' });
 
 	//Find extension ID
 	const targets = await browser.targets();
