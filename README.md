@@ -22,7 +22,7 @@ Bootstrap the extension.
 
     const extensionEnvironment = await bootstrapExtension({
         pathToExtension: './test/test-extension',
-        contentUrl: `file:///${process.cwd()}/test/content-page.html`, // The URL of the content page that is being browsed
+        contentUrl: `http://127.0.0.1:8080/test/content-page.html`, // The URL of the content page that is being browsed
         //slowMo: 100, //(uncomment this line to slow down Puppeteer's actions)
         //devtools: true, //(uncomment this line to open the browser's devtools)
         //maxAttemptsToFindExtension: 20, //(Maximum attempts to find the extension's service worker, as sometimes it takes a while to load - uncomment and increase number if your tests fail with "TypeError: Cannot read property '_targetInfo' of undefined")
@@ -72,9 +72,9 @@ Close Puppeteer's browser.
         beforeAll(async () => {
             const extensionEnvironment = await bootstrapExtension({
                 pathToExtension: './test/test-extension',
-                contentUrl: `file:///${process.cwd()}/test/content-page.html`, // The URL of the content page that is being browsed
-                //slowMo: 100, //(uncomment to slow down Puppeteer's actions)
-                //devtools: true, //(uncomment to open the browser's devtools)
+                contentUrl: `http://127.0.0.1:8080/test/content-page.html`, // The URL of the content page that is being browsed
+                //slowMo: 100, //(uncomment this line to slow down Puppeteer's actions)
+                //devtools: true, //(uncomment this line to open the browser's devtools)
                 //maxAttemptsToFindExtension: 20, //(Maximum attempts to find the extension's service worker, as sometimes it takes a while to load - uncomment and increase number if your tests fail with "TypeError: Cannot read property '_targetInfo' of undefined")
             });
 
