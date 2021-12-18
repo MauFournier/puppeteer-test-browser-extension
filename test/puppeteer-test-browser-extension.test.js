@@ -9,6 +9,7 @@ describe('Test browser extension', () => {
 			contentUrl: `file:///${process.cwd()}/test/content-page.html`, // The URL of the content page that is being browsed
 			//, slowMo: 100 (uncomment to slow down Puppeteer's actions)
 			//, devtools: true (uncomment to open the browser's devtools)
+			//, maxAttemptsToFindExtension: 20 (Maximum attempts to find the extension's service worker - sometimes it takes a bit)
 		});
 
 		browser = extensionEnvironment.browser;
