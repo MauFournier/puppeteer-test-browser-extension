@@ -85,5 +85,5 @@ I just wanted to have this available as a public NPM package.
 
 ## Website:
 
-- [Github: maufrontier/puppeteer-test-browser-extension](https://github.com/tweak-extension/puppeteer-test-browser-ext) by [Daniel Caldas](https://github.com/danielcaldas)
+- [Github: maufrontier/puppeteer-test-browser-extension](https://github.com/maufrontier/puppeteer-test-browser-extension) by [MauFrontier](https://github.com/maufrontier)
 - [Source: puppeteer-test-browser-ext](https://github.com/tweak-extension/puppeteer-test-browser-ext) by [Daniel Caldas](https://github.com/danielcaldas)
