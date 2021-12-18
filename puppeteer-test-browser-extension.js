@@ -16,7 +16,7 @@
 
 const puppeteer = require('puppeteer');
 
-async function bootstrap(options = {}) {
+async function bootstrapExtension(options = {}) {
 	const {
 		devtools = false, //Open the browser's devtools
 		slowMo = false, //slow down Puppeteer actions
@@ -58,4 +58,4 @@ async function bootstrap(options = {}) {
 	};
 }
 
-module.exports = { bootstrap };
+module.exports = { bootstrapExtension };
