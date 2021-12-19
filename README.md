@@ -21,7 +21,7 @@ Bootstrap the extension.
     let browser, contentPage, extensionPage;
 
     const extensionEnvironment = await bootstrapExtension({
-        pathToExtension: './test/test-extension',
+        pathToExtension: './test/test-extension', //The path to the uncompressed extension's folder. It shouldn't be a ZIP file.
         contentUrl: `http://127.0.0.1:8080/test/content-page.html`, // The URL of the content page that is being browsed
         //slowMo: 100, //(uncomment this line to slow down Puppeteer's actions)
         //devtools: true, //(uncomment this line to open the browser's devtools)
@@ -71,7 +71,7 @@ Close Puppeteer's browser.
 
         beforeAll(async () => {
             const extensionEnvironment = await bootstrapExtension({
-                pathToExtension: './test/test-extension',
+                pathToExtension: './test/test-extension', //The path to the uncompressed extension's folder. It shouldn't be a ZIP file.
                 contentUrl: `http://127.0.0.1:8080/test/content-page.html`, // The URL of the content page that is being browsed
                 //slowMo: 100, //(uncomment this line to slow down Puppeteer's actions)
                 //devtools: true, //(uncomment this line to open the browser's devtools)

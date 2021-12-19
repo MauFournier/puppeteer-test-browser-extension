@@ -22,7 +22,7 @@ async function bootstrapExtension(options = {}) {
 		slowMo = false, //slow down Puppeteer actions
 		maxAttemptsToFindExtension = 20, //Maximum attempts to find the extension's service worker - sometimes it takes a bit
 		contentUrl, //The URL of the content page that is being browsed
-		pathToExtension, //The path to the extension's folder
+		pathToExtension, //The path to the uncompressed extension's folder. It shouldn't be a ZIP file.
 	} = options;
 	const browser = await puppeteer.launch({
 		headless: false,
