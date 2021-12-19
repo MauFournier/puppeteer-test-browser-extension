@@ -40,7 +40,10 @@ async function bootstrapExtension(options = {}) {
 	const contentPage = await browser.newPage();
 	await contentPage.goto(contentUrl, { waitUntil: 'load' });
 
-	extensionId = await findExtensionId(browser, maxAttemptsToFindExtension);
+	const extensionId = await findExtensionId(
+		browser,
+		maxAttemptsToFindExtension
+	);
 
 	//Open extension in a tab
 	const extensionPage = await browser.newPage();
