@@ -20,30 +20,34 @@ async function bootstrapExtension(options = {}) {
 	const {
 		devtools = false, //Open the browser's devtools
 		slowMo = false, //slow down Puppeteer actions
-		maxAttemptsToFindExtension = 20, //Maximum attempts to find the extension's service worker - sometimes it takes a bit
 		contentUrl, //The URL of the content page that is being browsed
-		pathToExtension, //The path to the uncompressed extension's folder. It shouldn't be a ZIP file.
+		pathToExtension, //The path to the extension's folder
 	} = options;
+
+	console.log(pathToExtension);
+
 	const browser = await puppeteer.launch({
 		headless: false,
 		executablePath: process.env.PUPPETEER_EXEC_PATH, //Needed to run on Github Actions CI - check https://github.com/marketplace/actions/puppeteer-headful-with-commands
 		devtools,
 		args: [
-			`--disable-extensions-except=${pathToExtension}`,
 			`--load-extension=${pathToExtension}`,
+			`--disable-extensions-except=${pathToExtension}`,
 			'--no-sandbox',
 		],
 		...(slowMo && { slowMo }),
 	});
 
+	//Find Extension's ID inside the "service-worker" target
+	const extTarget = await browser.waitForTarget(
+		(target) => target.type() === 'service_worker'
+	);
+	const partialExtensionUrl = extTarget._targetInfo.url || '';
+	const [, , extensionId] = partialExtensionUrl.split('/');
+
 	//Open content page
 	const contentPage = await browser.newPage();
 	await contentPage.goto(contentUrl, { waitUntil: 'load' });
-
-	const extensionId = await findExtensionId(
-		browser,
-		maxAttemptsToFindExtension
-	);
 
 	//Open extension in a tab
 	const extensionPage = await browser.newPage();
@@ -57,29 +61,5 @@ async function bootstrapExtension(options = {}) {
 		extensionPage,
 	};
 }
-
-const findExtensionId = async (browser, maxAttemptsToFindExtension) => {
-	const delay = 50;
-	let attempts = 0;
-	let targets, extensionTarget;
-
-	//Wait for extension's service worker to appear among targets.
-	//Sometimes it takes a bit.
-	while (attempts++ < maxAttemptsToFindExtension && !extensionTarget) {
-		targets = await browser.targets();
-		extensionTarget = targets.find(
-			(target) => target.type() === 'service_worker'
-		);
-		!extensionTarget && (await sleep(delay));
-	}
-
-	const partialExtensionUrl = extensionTarget._targetInfo.url || '';
-	const [, , extensionId] = partialExtensionUrl.split('/');
-	return extensionId;
-};
-
-const sleep = (ms) => {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-};
 
 module.exports = { bootstrapExtension };
