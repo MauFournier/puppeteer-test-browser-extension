@@ -71,7 +71,7 @@ Close Puppeteer's browser.
 ```javascript
 await browser.close();
 ```
-## Full example — Local testing:
+### Full example — Local testing:
 
 ```javascript
 const { bootstrapExtension } = require('puppeteer-test-browser-extension');
