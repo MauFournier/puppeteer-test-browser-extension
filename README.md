@@ -132,6 +132,16 @@ You'll need to be able to open a headful (non-headless) version of Chrome.
 
 Check out my [Puppeteer Headful with Commands](https://github.com/marketplace/actions/puppeteer-headful-with-commands) Github action for instructions and an example.
 
+## Website:
+
+- **Github**: [puppeteer-test-browser-extension](https://github.com/maufrontier/puppeteer-test-browser-extension) by [MauFrontier](https://github.com/maufrontier)
+- **NPM**: [puppeteer-test-browser-extension](https://www.npmjs.com/package/puppeteer-test-browser-extension) by [MauFrontier](https://www.npmjs.com/~maufrontier)
+- **Inspiration**: [puppeteer-test-browser-ext](https://github.com/tweak-extension/puppeteer-test-browser-ext) by [Daniel Caldas](https://github.com/danielcaldas)
+
+## Recommended pairing:
+
+- **GitHub Action**: Pair with [Puppeteer Headful with Commands](https://github.com/marketplace/actions/puppeteer-headful-with-commands) to run end-to-end tests of your browser extension as part of your CI/CD pipeline.
+
 ## LICENSE:
 
 Licensed under the Apache License, Version 2.0 (the "License"). Check LICENSE.md for more details.
@@ -141,9 +151,3 @@ Licensed under the Apache License, Version 2.0 (the "License"). Check LICENSE.md
 [Daniel Caldas](https://github.com/danielcaldas) deserves all the credit here. This is just slightly modified and re-packaged version of the work that he graciously released under the Apache license.
 
 I just wanted to have this available as a public NPM package, and to add a few more features to it.
-
-## Website:
-
-- **Github**: [puppeteer-test-browser-extension](https://github.com/maufrontier/puppeteer-test-browser-extension) by [MauFrontier](https://github.com/maufrontier)
-- **NPM**: [puppeteer-test-browser-extension](https://www.npmjs.com/package/puppeteer-test-browser-extension) by [MauFrontier](https://www.npmjs.com/~maufrontier)
-- **Inspiration**: [puppeteer-test-browser-ext](https://github.com/tweak-extension/puppeteer-test-browser-ext) by [Daniel Caldas](https://github.com/danielcaldas)
