@@ -7,16 +7,21 @@ Use this to test your browser extension locally while in development, or as part
 Currently, only Google Chrome is supported.
 
 ## Installation:
-```
+
+```shell
 npm install puppeteer-test-browser-extension
 ```
+
 ## Usage — Local testing:
 
 Import the module.
+
 ```javascript
 const { bootstrapExtension } = require('puppeteer-test-browser-extension');
 ```
+
 Bootstrap the extension.
+
 ```javascript
 let browser, contentPage, extensionPage;
 
