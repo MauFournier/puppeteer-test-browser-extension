@@ -36,7 +36,9 @@ browser = extensionEnvironment.browser;
 contentPage = extensionEnvironment.contentPage;
 extensionPage = extensionEnvironment.extensionPage;
 ```
+
 Interact with the content page (the page that is being browsed).
+
 ```javascript
 // First, activate the content page
 contentPage.bringToFront();
@@ -51,8 +53,11 @@ expect(btnText).toEqual('Submit');
 //Example: Click the button
 await btn.click();
 ```
+
 Interact with the extension's popup (which has been opened in a separate browser tab).
+
 ```javascript
+
 // First, activate the popup page
 await extensionPage.bringToFront();
 
@@ -67,6 +72,7 @@ Close Puppeteer's browser.
 await browser.close();
 ```
 ## Full example — Local testing:
+
 ```javascript
 const { bootstrapExtension } = require('puppeteer-test-browser-extension');
 
@@ -117,6 +123,7 @@ describe('Test browser extension', () => {
     });
 });
 ```
+
 ## Usage — As part of a CI/CD pipeline:
 
 You can use this to run end-to-end teests of your browser extension as part of your CI/CD pipeline.
