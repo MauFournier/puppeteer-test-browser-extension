@@ -7,17 +7,17 @@ Use this to test your browser extension locally while in development, or as part
 Currently, only Google Chrome is supported.
 
 ## Installation:
-
+```
     npm install puppeteer-test-browser-extension
-
+```
 ## Usage — Local testing:
 
 Import the module.
-
+```javascript
     const { bootstrapExtension } = require('puppeteer-test-browser-extension');
-
+```
 Bootstrap the extension.
-
+```javascript
     let browser, contentPage, extensionPage;
 
     const extensionEnvironment = await bootstrapExtension({
@@ -30,9 +30,9 @@ Bootstrap the extension.
     browser = extensionEnvironment.browser;
     contentPage = extensionEnvironment.contentPage;
     extensionPage = extensionEnvironment.extensionPage;
-
+```
 Interact with the content page (the page that is being browsed).
-
+```javascript
     // First, activate the content page
     contentPage.bringToFront();
 
@@ -45,9 +45,9 @@ Interact with the content page (the page that is being browsed).
     // You can use Puppeteer's features as usual
     //Example: Click the button
     await btn.click();
-
+```
 Interact with the extension's popup (which has been opened in a separate browser tab).
-
+```javascript
     // First, activate the popup page
     await extensionPage.bringToFront();
 
@@ -56,13 +56,13 @@ Interact with the extension's popup (which has been opened in a separate browser
     const heading = await extensionPage.$('h1');
     const extensionHeadingText = await heading.evaluate((e) => e.innerText);
     expect(extensionHeadingText).toEqual('Extension popup');
-
+```
 Close Puppeteer's browser.
-
+```javascript
     await browser.close();
-
+```
 ## Full example — Local testing:
-
+```javascript
     const { bootstrapExtension } = require('puppeteer-test-browser-extension');
 
     describe('Test browser extension', () => {
@@ -111,7 +111,7 @@ Close Puppeteer's browser.
             await browser.close();
         });
     });
-
+```
 ## Usage — As part of a CI/CD pipeline:
 
 You can use this to run end-to-end teests of your browser extension as part of your CI/CD pipeline.
@@ -133,4 +133,5 @@ I just wanted to have this available as a public NPM package, and to add a few m
 ## Website:
 
 - [Github: maufrontier/puppeteer-test-browser-extension](https://github.com/maufrontier/puppeteer-test-browser-extension) by [MauFrontier](https://github.com/maufrontier)
-- [Source: puppeteer-test-browser-ext](https://github.com/tweak-extension/puppeteer-test-browser-ext) by [Daniel Caldas](https://github.com/danielcaldas)
+- [NPM: puppeteer-test-browser-extension](https://www.npmjs.com/package/puppeteer-test-browser-extension) by [MauFrontier](https://www.npmjs.com/~maufrontier)
+- [Inspiration: puppeteer-test-browser-ext](https://github.com/tweak-extension/puppeteer-test-browser-ext) by [Daniel Caldas](https://github.com/danielcaldas)
