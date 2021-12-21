@@ -24,8 +24,6 @@ async function bootstrapExtension(options = {}) {
 		pathToExtension, //The path to the extension's folder
 	} = options;
 
-	console.log(pathToExtension);
-
 	const browser = await puppeteer.launch({
 		headless: false,
 		executablePath: process.env.PUPPETEER_EXEC_PATH, //Needed to run on Github Actions CI - check https://github.com/marketplace/actions/puppeteer-headful-with-commands
