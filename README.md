@@ -144,6 +144,6 @@ I just wanted to have this available as a public NPM package, and to add a few m
 
 ## Website:
 
-- [Github: maufrontier/puppeteer-test-browser-extension](https://github.com/maufrontier/puppeteer-test-browser-extension) by [MauFrontier](https://github.com/maufrontier)
-- [NPM: puppeteer-test-browser-extension](https://www.npmjs.com/package/puppeteer-test-browser-extension) by [MauFrontier](https://www.npmjs.com/~maufrontier)
-- [Inspiration: puppeteer-test-browser-ext](https://github.com/tweak-extension/puppeteer-test-browser-ext) by [Daniel Caldas](https://github.com/danielcaldas)
+- **Github**: [puppeteer-test-browser-extension](https://github.com/maufrontier/puppeteer-test-browser-extension) by [MauFrontier](https://github.com/maufrontier)
+- **NPM**: [puppeteer-test-browser-extension](https://www.npmjs.com/package/puppeteer-test-browser-extension) by [MauFrontier](https://www.npmjs.com/~maufrontier)
+- **Inspiration**: [puppeteer-test-browser-ext](https://github.com/tweak-extension/puppeteer-test-browser-ext) by [Daniel Caldas](https://github.com/danielcaldas)
