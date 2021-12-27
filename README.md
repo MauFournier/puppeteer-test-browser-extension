@@ -81,6 +81,8 @@ await browser.close();
 
 ### Full example — Local testing:
 
+This example uses [jest](https://www.npmjs.com/package/jest) to run tests.
+
 ```javascript
 const bootstrapExtension = require('puppeteer-test-browser-extension');
 
