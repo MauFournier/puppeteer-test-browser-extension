@@ -4,6 +4,7 @@
 	"description": "Perform end-to-end tests of a browser extension using Puppeteer.",
 	"main": "./cjs-entry.js",
 	"module": "./lib/esm/puppeteer-test-browser-extension.js",
+	"types": "lib/cjs/puppeteer-test-browser-extension.d.ts",
 	"files": [
 		"lib/",
 		"cjs-entry.js"
