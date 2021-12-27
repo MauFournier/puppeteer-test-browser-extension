@@ -140,6 +140,10 @@ You'll need to be able to open a headful (non-headless) version of Chrome.
 
 Check out my [Puppeteer Headful with Commands](https://github.com/marketplace/actions/puppeteer-headful-with-commands) Github action for instructions and an example.
 
+## Debugging Tips
+
+Check out [Google's tips for debugging with Puppeteer](https://developers.google.com/web/tools/puppeteer/debugging).
+
 ## Website:
 
 - **Github**: [puppeteer-test-browser-extension](https://github.com/maufrontier/puppeteer-test-browser-extension) by [MauFrontier](https://github.com/maufrontier)
