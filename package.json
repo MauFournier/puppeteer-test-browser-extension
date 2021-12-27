@@ -2,7 +2,7 @@
 	"name": "puppeteer-test-browser-extension",
 	"version": "1.0.1",
 	"description": "Perform end-to-end tests of a browser extension using Puppeteer.",
-	"main": "./puppeteer-test-browser-extension.js",
+	"main": "src/puppeteer-test-browser-extension.js",
 	"scripts": {
 		"test": "jest"
 	},
