@@ -24,6 +24,17 @@ interface IBootstrapOptions {
 }
 
 const bootstrapExtension = async function (options: IBootstrapOptions) {
+	if (options.contentUrl == undefined) {
+		throw new TypeError(
+			`contentUrl is a required option for bootstrapExtension().`
+		);
+	}
+	if (options.pathToExtension == undefined) {
+		throw new TypeError(
+			'pathToExtension is a required option for bootstrapExtension().'
+		);
+	}
+
 	const {
 		devtools = false, //Open the browser's devtools
 		slowMo = false, //slow down Puppeteer actions
