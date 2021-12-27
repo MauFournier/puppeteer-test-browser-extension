@@ -14,9 +14,16 @@
 //
 //  This file has been modified from its original source by Mauricio Fournier - https://github.com/maufrontier/
 
-const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer';
 
-async function bootstrapExtension(options = {}) {
+interface IBootstrapOptions {
+	devtools?: boolean;
+	slowMo?: number;
+	contentUrl: string;
+	pathToExtension: string;
+}
+
+const bootstrapExtension = async function (options: IBootstrapOptions) {
 	const {
 		devtools = false, //Open the browser's devtools
 		slowMo = false, //slow down Puppeteer actions
@@ -40,7 +47,7 @@ async function bootstrapExtension(options = {}) {
 	const extTarget = await browser.waitForTarget(
 		(target) => target.type() === 'service_worker'
 	);
-	const partialExtensionUrl = extTarget._targetInfo.url || '';
+	const partialExtensionUrl = extTarget.url() || '';
 	const [, , extensionId] = partialExtensionUrl.split('/');
 
 	//Open content page
@@ -58,6 +65,6 @@ async function bootstrapExtension(options = {}) {
 		extensionUrl,
 		extensionPage,
 	};
-}
+};
 
-module.exports = { bootstrapExtension };
+export default bootstrapExtension;

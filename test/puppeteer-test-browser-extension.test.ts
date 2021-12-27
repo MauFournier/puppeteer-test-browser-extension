@@ -1,7 +1,10 @@
-const { bootstrapExtension } = require('puppeteer-test-browser-extension');
+import bootstrapExtension from '../src/puppeteer-test-browser-extension';
+import { Browser, Page, ElementHandle } from 'puppeteer';
 
 describe('Test browser extension', () => {
-	let browser, contentPage, extensionPage;
+	let browser: Browser;
+	let contentPage: Page;
+	let extensionPage: Page;
 
 	beforeAll(async () => {
 		const extensionEnvironment = await bootstrapExtension({
@@ -24,12 +27,16 @@ describe('Test browser extension', () => {
 		// (Assuming your content page contains <button>Submit</button>)
 		// The user should see the button on the web page
 		const btn = await contentPage.$('button');
-		const btnText = await btn.evaluate((e) => e.innerText);
-		expect(btnText).toEqual('Submit');
 
-		// You can use Puppeteer's features as usual
-		//Example: Click the button
-		await btn.click();
+		if (btn) {
+			const btnText = await btn.evaluate(
+				(node) => (<HTMLElement>node).innerText
+			);
+			expect(btnText).toEqual('Submit');
+			// You can use Puppeteer's features as usual
+			//Example: Click the button
+			await btn.click();
+		}
 
 		// Use extensionPage to nteract with the extension's popup (which has been opened in a separate browser tab).
 		// First, activate the popup page
@@ -38,8 +45,12 @@ describe('Test browser extension', () => {
 		// (Assuming your content page contains <h1>Extension popup</h1>)
 		// The user should see the heading on the popup
 		const heading = await extensionPage.$('h1');
-		const extensionHeadingText = await heading.evaluate((e) => e.innerText);
-		expect(extensionHeadingText).toEqual('Extension popup');
+		if (heading) {
+			const extensionHeadingText = await heading.evaluate(
+				(node) => (<HTMLElement>node).innerText
+			);
+			expect(extensionHeadingText).toEqual('Extension popup');
+		}
 	});
 
 	afterAll(async () => {
