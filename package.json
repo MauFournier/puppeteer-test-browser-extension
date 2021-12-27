@@ -1,6 +1,6 @@
 {
 	"name": "puppeteer-test-browser-extension",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "Perform end-to-end tests of a browser extension using Puppeteer.",
 	"main": "./lib/cjs/puppeteer-test-browser-extension.js",
 	"module": "./lib/esm/puppeteer-test-browser-extension.js",
