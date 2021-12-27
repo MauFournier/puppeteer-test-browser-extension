@@ -1,9 +1,15 @@
 {
 	"name": "puppeteer-test-browser-extension",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"description": "Perform end-to-end tests of a browser extension using Puppeteer.",
-	"main": "src/puppeteer-test-browser-extension.js",
+	"main": "./lib/cjs/puppeteer-test-browser-extension.js",
+	"module": "./lib/esm/index.js",
+	"files": [
+		"lib/"
+	],
 	"scripts": {
+		"tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+		"prepublishOnly": "npm run tsc",
 		"test": "jest"
 	},
 	"repository": {
