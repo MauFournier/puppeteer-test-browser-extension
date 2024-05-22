@@ -1,12 +1,13 @@
 {
-	"name": "My test Extension",
-	"description": "This barebones extension is only for testing purposes.",
-	"version": "1.0.0",
-	"manifest_version": 3,
-	"background": {
-		"service_worker": "background.js"
-	},
-	"action": {
-		"default_popup": "./index.html"
-	}
+    "name": "My test Extension",
+    "description": "This barebones extension is only for testing purposes.",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "./index.html"
+    },
+    "devtools_page": "./devtools.html"
 }
