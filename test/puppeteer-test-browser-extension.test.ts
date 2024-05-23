@@ -56,19 +56,15 @@ describe('Test browser extension', () => {
     }
   });
 
-  it('Should display a tab in DevTools and allow interaction with it', async () => {
-    //The user should see the button on the DevTools panel
+  it('Should display a tab in DevTools', async () => {
     await contentPage.bringToFront();
     const btn = await devToolsFrame.$('#devtools-btn');
 
     expect(btn).toBeTruthy();
 
-    if (btn) {
+    if (btn !== null) {
       const btnText = await (await btn.getProperty('innerText')).jsonValue();
       expect(btnText).toEqual('Click me');
-
-      // await devToolsFrame.click('#devtools-btn');
-      // expect(btnText).toEqual('Click me');
     }
   });
 
