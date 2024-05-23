@@ -35,7 +35,7 @@
 	"homepage": "https://github.com/maufrontier/puppeteer-test-browser-extension#readme",
 	"dependencies": {
 		"puppeteer": "^13.0.0",
-		"puppeteer-devtools": "^3.3.0",
+		"puppeteer-devtools": "^3.3.0"
 	},
 	"devDependencies": {
 		"@types/jest": "^27.0.3",
