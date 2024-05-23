@@ -15,73 +15,74 @@
 //  This file has been modified from its original source by Mauricio Fournier - https://github.com/maufrontier/
 
 import puppeteer from 'puppeteer';
+import fs from 'fs';
+import path from 'path';
 
 interface IBootstrapOptions {
-    devtools?: boolean;
-    slowMo?: number;
-    contentUrl: string;
-    pathToExtension: string;
+  devtools?: boolean;
+  slowMo?: number;
+  contentUrl: string;
+  pathToExtension: string;
 }
 
 const bootstrapExtension = async function (options: IBootstrapOptions) {
-    if (options.contentUrl == undefined) {
-        throw new TypeError(
-            `contentUrl is a required option for bootstrapExtension().`
-        );
-    }
-    if (options.pathToExtension == undefined) {
-        throw new TypeError(
-            'pathToExtension is a required option for bootstrapExtension().'
-        );
-    }
+  if (!options.contentUrl) {
+    throw new TypeError('contentUrl is a required option for bootstrapExtension().');
+  }
+  if (!options.pathToExtension) {
+    throw new TypeError('pathToExtension is a required option for bootstrapExtension().');
+  }
 
-    const {
-        devtools = false, //Open the browser's devtools
-        slowMo = false, //slow down Puppeteer actions
-        contentUrl, //The URL of the content page that is being browsed
-        pathToExtension, //The path to the extension's folder
-    } = options;
+  const { devtools = false, slowMo = false, contentUrl, pathToExtension } = options;
 
-    const browser = await puppeteer.launch({
-        headless: false,
-        executablePath: process.env.PUPPETEER_EXEC_PATH, //Needed to run on Github Actions CI - check https://github.com/marketplace/actions/puppeteer-headful-with-commands
-        devtools,
-        args: [
-            `--load-extension=${pathToExtension}`,
-            `--disable-extensions-except=${pathToExtension}`,
-            ' --no-sandbox',
-        ],
-        ...(slowMo && { slowMo }),
-    });
+  // Read and parse the manifest file
+  const manifestPath = path.resolve(pathToExtension, 'manifest.json');
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 
-    // Find Extension's ID inside the "service-worker" target
-    const extTarget = await browser.waitForTarget(
-        (target) => target.type() === 'service_worker'
-    );
-    const partialExtensionUrl = extTarget.url() || '';
-    const [, , extensionId] = partialExtensionUrl.split('/');
+  if (!manifest.action || !manifest.action.default_popup) {
+    throw new Error('default_popup not found in manifest.json');
+  }
 
-    // Open content page
-    const contentPage = await browser.newPage();
-    await contentPage.goto(contentUrl, { waitUntil: 'load' });
+  const defaultPopup = manifest.action.default_popup;
 
-    // Open extension in a tab
-    const extensionPage = await browser.newPage();
-    const extensionUrl = `chrome-extension://${extensionId}/index.html`;
-    await extensionPage.goto(extensionUrl, { waitUntil: 'load' });
+  const browser = await puppeteer.launch({
+    headless: false,
+    executablePath: process.env.PUPPETEER_EXEC_PATH, // Needed to run on Github Actions CI - check https://github.com/marketplace/actions/puppeteer-headful-with-commands
+    devtools,
+    args: [
+      `--load-extension=${pathToExtension}`,
+      `--disable-extensions-except=${pathToExtension}`,
+      '--no-sandbox',
+    ],
+    ...(slowMo && { slowMo }),
+  });
 
-    // Open the DevTools panel for the content page
-    const devToolsPage = await browser.newPage();
-    const devToolsUrl = `devtools://devtools/bundled/inspector.html?experiments=true&v8only=true&ws=${extensionId}/index.html`;
-    await devToolsPage.goto(devToolsUrl);
+  // Find Extension's ID inside the "service-worker" target
+  const extTarget = await browser.waitForTarget((target) => target.type() === 'service_worker');
+  const partialExtensionUrl = extTarget.url() || '';
+  const [, , extensionId] = partialExtensionUrl.split('/');
 
-    return {
-        contentPage,
-        browser,
-        extensionUrl,
-        extensionPage,
-        devToolsPage,
-    };
+  // Open content page
+  const contentPage = await browser.newPage();
+  await contentPage.goto(contentUrl, { waitUntil: 'load' });
+
+  // Open extension in a tab
+  const extensionPage = await browser.newPage();
+  const extensionUrl = `chrome-extension://${extensionId}/${defaultPopup}`;
+  await extensionPage.goto(extensionUrl, { waitUntil: 'load' });
+
+  // Open the DevTools panel for the content page
+  const devToolsPage = await browser.newPage();
+  const devToolsUrl = `devtools://devtools/bundled/inspector.html?experiments=true&v8only=true&ws=${extensionId}/index.html`;
+  await devToolsPage.goto(devToolsUrl);
+
+  return {
+    contentPage,
+    browser,
+    extensionUrl,
+    extensionPage,
+    devToolsPage,
+  };
 };
 
 export default bootstrapExtension;
