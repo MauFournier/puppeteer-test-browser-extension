@@ -10,6 +10,6 @@ declare const bootstrapExtension: (options: IBootstrapOptions) => Promise<{
     browser: puppeteer.Browser;
     extensionUrl: string;
     extensionPage: puppeteer.Page;
-    devToolsPage: puppeteer.Page;
+    devToolsPanel: puppeteer.Frame;
 }>;
 export default bootstrapExtension;

@@ -1,22 +1,11 @@
-//  Copyright 2021 Daniel Caldas
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-//  This file has been modified from its original source by Mauricio Fournier - https://github.com/maufrontier/
-
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 import path from 'path';
+import {
+  getDevtoolsPanel,
+  setCaptureContentScriptExecutionContexts,
+  getContentScriptExcecutionContext,
+} from 'puppeteer-devtools';
 
 interface IBootstrapOptions {
   devtools?: boolean;
@@ -44,6 +33,7 @@ const bootstrapExtension = async function (options: IBootstrapOptions) {
   }
 
   const defaultPopup = manifest.action.default_popup;
+  const devtoolsPage = manifest.devtools_page || 'devtools.html'; // Default to devtools.html if not specified
 
   const browser = await puppeteer.launch({
     headless: false,
@@ -64,6 +54,7 @@ const bootstrapExtension = async function (options: IBootstrapOptions) {
 
   // Open content page
   const contentPage = await browser.newPage();
+  await setCaptureContentScriptExecutionContexts(contentPage);
   await contentPage.goto(contentUrl, { waitUntil: 'load' });
 
   // Open extension in a tab
@@ -71,17 +62,15 @@ const bootstrapExtension = async function (options: IBootstrapOptions) {
   const extensionUrl = `chrome-extension://${extensionId}/${defaultPopup}`;
   await extensionPage.goto(extensionUrl, { waitUntil: 'load' });
 
-  // Open the DevTools panel for the content page
-  const devToolsPage = await browser.newPage();
-  const devToolsUrl = `devtools://devtools/bundled/inspector.html?experiments=true&v8only=true&ws=${extensionId}/index.html`;
-  await devToolsPage.goto(devToolsUrl);
+  // Open the DevTools panel
+  const devToolsPanel = await getDevtoolsPanel(contentPage, { panelName: devtoolsPage });
 
   return {
     contentPage,
     browser,
     extensionUrl,
     extensionPage,
-    devToolsPage,
+    devToolsPanel,
   };
 };
 
