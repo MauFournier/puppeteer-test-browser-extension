@@ -63,14 +63,14 @@ const bootstrapExtension = async function (options: IBootstrapOptions) {
   await extensionPage.goto(extensionUrl, { waitUntil: 'load' });
 
   // Open the DevTools panel
-  const devToolsPanel = await getDevtoolsPanel(contentPage, { panelName: devtoolsPage });
+  const devToolsFrame = await getDevtoolsPanel(contentPage, { panelName: devtoolsPage });
 
   return {
     contentPage,
     browser,
     extensionUrl,
     extensionPage,
-    devToolsPanel,
+    devToolsFrame,
   };
 };
 
