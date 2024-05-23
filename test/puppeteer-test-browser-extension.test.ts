@@ -45,7 +45,7 @@ describe('Test browser extension', () => {
     // First, activate the popup page
     await PopupPage.bringToFront();
 
-    // (Assuming your content page contains <h1>Extension popup</h1>)
+    // (Assuming your popup page contains <h1>Extension popup</h1>)
     // The user should see the heading on the popup
     const heading = await PopupPage.$('h1');
     if (heading) {
