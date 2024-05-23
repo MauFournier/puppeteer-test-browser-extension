@@ -6,8 +6,11 @@
     "background": {
         "service_worker": "background.js"
     },
+    "devtools_page": "devtools.html",
     "action": {
-        "default_popup": "./index.html"
+        "default_popup": "index.html"
     },
-    "devtools_page": "./devtools.html"
+    "icons": {
+    "16": "blank.png"
+    }
 }

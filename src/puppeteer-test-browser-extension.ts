@@ -62,8 +62,25 @@ const bootstrapExtension = async function (options: IBootstrapOptions) {
   const extensionUrl = `chrome-extension://${extensionId}/${defaultPopup}`;
   await extensionPage.goto(extensionUrl, { waitUntil: 'load' });
 
+  // Close the first (blank) tab
+  const pages = await browser.pages();
+  if (pages.length > 2) {
+    await pages[0].close();
+  }
+
+  // Ensure the DevTools tab is opened and active
+  const targets = await browser.targets();
+  const devToolsTarget = targets.find(target => target.url().includes(devtoolsPage));
+  if (devToolsTarget) {
+    const devToolsPage = await devToolsTarget.page();
+    await devToolsPage?.bringToFront();
+  }
+
+  // Add a delay to ensure the DevTools panel loads completely
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
   // Open the DevTools panel
-  const devToolsFrame = await getDevtoolsPanel(contentPage, { panelName: devtoolsPage });
+  const devToolsFrame = await getDevtoolsPanel(contentPage, { panelName: devtoolsPage, timeout: 7000});
 
   return {
     contentPage,
