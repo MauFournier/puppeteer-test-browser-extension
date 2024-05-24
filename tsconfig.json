@@ -8,7 +8,8 @@
 		"strict": true,
 		"skipLibCheck": true,
 		"moduleResolution": "node",
-		"declaration": true
+		"declaration": true,
+		"typeRoots": ["./node_modules/@types", "./types"]
 	},
-	"include": ["./src"]
+	"include": ["./src", "./**/*.d.ts"]
 }

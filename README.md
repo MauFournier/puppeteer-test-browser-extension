@@ -2,7 +2,7 @@
 
 Perform end-to-end tests of a browser extension using Puppeteer.
 
-Use this to test your browser extension locally while in development, or as part of your CI/CD pipeline (details below).
+Use this to test your browser extension. At this time, only local tests are supported.
 
 Currently, only Google Chrome is supported.
 
@@ -134,14 +134,6 @@ describe('Test browser extension', () => {
 });
 ```
 
-## Usage — As part of a CI/CD pipeline:
-
-You can use this to run end-to-end teests of your browser extension as part of your CI/CD pipeline.
-
-You'll need to be able to open a headful (non-headless) version of Chrome.
-
-Check out my [Puppeteer Headful with Commands](https://github.com/marketplace/actions/puppeteer-headful-with-commands) Github action for instructions and an example.
-
 ## Debugging Tips
 
 Check out [Google's tips for debugging with Puppeteer](https://developers.google.com/web/tools/puppeteer/debugging).
@@ -151,10 +143,6 @@ Check out [Google's tips for debugging with Puppeteer](https://developers.google
 - **Github**: [puppeteer-test-browser-extension](https://github.com/maufrontier/puppeteer-test-browser-extension) by [MauFrontier](https://github.com/maufrontier)
 - **NPM**: [puppeteer-test-browser-extension](https://www.npmjs.com/package/puppeteer-test-browser-extension) by [MauFrontier](https://www.npmjs.com/~maufrontier)
 - **Inspiration**: [puppeteer-test-browser-ext](https://github.com/tweak-extension/puppeteer-test-browser-ext) by [Daniel Caldas](https://github.com/danielcaldas)
-
-## Recommended pairing:
-
-- **GitHub Action**: Pair with [Puppeteer Headful with Commands](https://github.com/marketplace/actions/puppeteer-headful-with-commands) to run end-to-end tests of your browser extension as part of your CI/CD pipeline.
 
 ## LICENSE:
 

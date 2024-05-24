@@ -1,81 +1,94 @@
-//  Copyright 2021 Daniel Caldas
-//
-//  Licensed under the Apache License, Version 2.0 (the "License");
-//  you may not use this file except in compliance with the License.
-//  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-//  This file has been modified from its original source by Mauricio Fournier - https://github.com/maufrontier/
-
 import puppeteer from 'puppeteer';
+import fs from 'fs';
+import path from 'path';
+import {
+  getDevtoolsPanel,
+  setCaptureContentScriptExecutionContexts,
+  getContentScriptExcecutionContext,
+} from 'puppeteer-devtools';
 
 interface IBootstrapOptions {
-	devtools?: boolean;
-	slowMo?: number;
-	contentUrl: string;
-	pathToExtension: string;
+  devtools?: boolean;
+  slowMo?: number;
+  contentUrl: string;
+  pathToExtension: string;
 }
 
 const bootstrapExtension = async function (options: IBootstrapOptions) {
-	if (options.contentUrl == undefined) {
-		throw new TypeError(
-			`contentUrl is a required option for bootstrapExtension().`
-		);
-	}
-	if (options.pathToExtension == undefined) {
-		throw new TypeError(
-			'pathToExtension is a required option for bootstrapExtension().'
-		);
-	}
+  if (!options.contentUrl) {
+    throw new TypeError('contentUrl is a required option for bootstrapExtension().');
+  }
+  if (!options.pathToExtension) {
+    throw new TypeError('pathToExtension is a required option for bootstrapExtension().');
+  }
 
-	const {
-		devtools = false, //Open the browser's devtools
-		slowMo = false, //slow down Puppeteer actions
-		contentUrl, //The URL of the content page that is being browsed
-		pathToExtension, //The path to the extension's folder
-	} = options;
+  const { devtools = false, slowMo = false, contentUrl, pathToExtension } = options;
 
-	const browser = await puppeteer.launch({
-		headless: false,
-		executablePath: process.env.PUPPETEER_EXEC_PATH, //Needed to run on Github Actions CI - check https://github.com/marketplace/actions/puppeteer-headful-with-commands
-		devtools,
-		args: [
-			`--load-extension=${pathToExtension}`,
-			`--disable-extensions-except=${pathToExtension}`,
-			'--no-sandbox',
-		],
-		...(slowMo && { slowMo }),
-	});
+  // Read and parse the manifest file
+  const manifestPath = path.resolve(pathToExtension, 'manifest.json');
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 
-	//Find Extension's ID inside the "service-worker" target
-	const extTarget = await browser.waitForTarget(
-		(target) => target.type() === 'service_worker'
-	);
-	const partialExtensionUrl = extTarget.url() || '';
-	const [, , extensionId] = partialExtensionUrl.split('/');
+  if (!manifest.action || !manifest.action.default_popup) {
+    throw new Error('default_popup not found in manifest.json');
+  }
 
-	//Open content page
-	const contentPage = await browser.newPage();
-	await contentPage.goto(contentUrl, { waitUntil: 'load' });
+  const defaultPopup = manifest.action.default_popup;
+  const devtoolsPage = manifest.devtools_page || 'devtools.html'; // Default to devtools.html if not specified
 
-	//Open extension in a tab
-	const extensionPage = await browser.newPage();
-	const extensionUrl = `chrome-extension://${extensionId}/index.html`;
-	await extensionPage.goto(extensionUrl, { waitUntil: 'load' });
+  const browser = await puppeteer.launch({
+    headless: false,
+    executablePath: process.env.PUPPETEER_EXEC_PATH,
+    devtools,
+    args: [
+      `--load-extension=${pathToExtension}`,
+      `--disable-extensions-except=${pathToExtension}`,
+      '--no-sandbox',
+    ],
+    ...(slowMo && { slowMo }),
+  });
 
-	return {
-		contentPage,
-		browser,
-		extensionUrl,
-		extensionPage,
-	};
+  // Find Extension's ID inside the "service-worker" target
+  const extTarget = await browser.waitForTarget((target) => target.type() === 'service_worker');
+  const partialExtensionUrl = extTarget.url() || '';
+  const [, , extensionId] = partialExtensionUrl.split('/');
+
+  // Open content page
+  const contentPage = await browser.newPage();
+  await setCaptureContentScriptExecutionContexts(contentPage);
+  await contentPage.goto(contentUrl, { waitUntil: 'load' });
+
+  // Open extension in a tab
+  const extensionPage = await browser.newPage();
+  const extensionUrl = `chrome-extension://${extensionId}/${defaultPopup}`;
+  await extensionPage.goto(extensionUrl, { waitUntil: 'load' });
+
+  // Close the first (blank) tab
+  const pages = await browser.pages();
+  if (pages.length > 2) {
+    await pages[0].close();
+  }
+
+  // Ensure the DevTools tab is opened and active
+  const targets = await browser.targets();
+  const devToolsTarget = targets.find(target => target.url().includes(devtoolsPage));
+  if (devToolsTarget) {
+    const devToolsPage = await devToolsTarget.page();
+    await devToolsPage?.bringToFront();
+  }
+
+  // Add a delay to ensure the DevTools panel loads completely
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
+  // Open the DevTools panel
+  const devToolsFrame = await getDevtoolsPanel(contentPage, { panelName: devtoolsPage, timeout: 7000});
+
+  return {
+    contentPage,
+    browser,
+    extensionUrl,
+    extensionPage,
+    devToolsFrame,
+  };
 };
 
 export default bootstrapExtension;
